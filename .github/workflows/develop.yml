@@ -1,0 +1,55 @@
+name: Expo Review
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    name: Lint & Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Cache Node Modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install Packages
+        run: npm install
+      - name: Typecheck
+        run: npm run tsc
+      - name: Check Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+  publish:
+    name: Publish
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: expo/expo-github-action@v5
+        with:
+          expo-packager: npm
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+          expo-cache: true
+      - name: Install Packages
+        run: npm install
+      - name: Expo Publish Channel
+        env:
+          ENVIRONMENT: develop
+        run: expo publish --non-interactive --release-channel=develop
