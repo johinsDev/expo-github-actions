@@ -52,7 +52,7 @@ jobs:
       - name: Set env
         if: endsWith(github.ref, '/develop')
         run: |
-          echo "::set-env name=ENVIRONMENT::develop"
+          echo "ENVIRONMENT=develop" >> $GITHUB_ENV
         # if: endsWith(github.ref, '/staging')
         #   run: |
         #     echo "::set-env name=ENVIRONMENT::staging"
