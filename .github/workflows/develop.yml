@@ -49,7 +49,12 @@ jobs:
           expo-cache: true
       - name: Install Packages
         run: npm install
+      - name: Set env
+        if: endsWith(github.ref, '/develop')
+        run: |
+          echo "::set-env name=ENVIRONMENT::develop"
+        if: endsWith(github.ref, '/staging')
+          run: |
+            echo "::set-env name=ENVIRONMENT::staging"
       - name: Expo Publish Channel
-        env:
-          ENVIRONMENT: develop
         run: expo publish --non-interactive --release-channel=develop
