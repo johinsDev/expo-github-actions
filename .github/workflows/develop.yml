@@ -50,10 +50,11 @@ jobs:
           expo-cache: true
       - name: Install Packages
         run: npm install
-      - name: Set env
+      - name: Set env develop
         if: endsWith(github.ref, '/develop')
         run: |
           echo "ENVIRONMENT=develop" >> $GITHUB_ENV
+      - name: Set env staging
         if: endsWith(github.ref, '/staging')
         run: |
           echo "ENVIRONMENT=staging" >> $GITHUB_ENV
