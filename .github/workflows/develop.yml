@@ -53,8 +53,8 @@ jobs:
         if: endsWith(github.ref, '/develop')
         run: |
           echo "ENVIRONMENT=develop" >> $GITHUB_ENV
-        # if: endsWith(github.ref, '/staging')
-        #   run: |
-        #     echo "::set-env name=ENVIRONMENT::staging"
+        if: endsWith(github.ref, '/staging')
+        run: |
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
       - name: Expo Publish Channel
         run: expo publish --non-interactive --release-channel=develop
