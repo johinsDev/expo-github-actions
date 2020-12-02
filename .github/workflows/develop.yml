@@ -59,4 +59,4 @@ jobs:
         run: |
           echo "ENVIRONMENT=staging" >> $GITHUB_ENV
       - name: Expo Publish Channel
-        run: expo publish --non-interactive --release-channel=develop
+        run: expo publish --non-interactive --release-channel=${{ ENVIRONMENT }}
